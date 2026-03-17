@@ -18,10 +18,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt = $db->prepare(
                 'SELECT id, username, password_hash, confirmed
                    FROM users
-                  WHERE email = :v OR username = :v
+                  WHERE email = :identifier_email OR username = :identifier_username
+               ORDER BY CASE WHEN email = :priority_email THEN 0 ELSE 1 END
                   LIMIT 1'
             );
             $stmt->execute([':v' => $identifier]);
+            $stmt->execute([
+                ':identifier_email'    => $identifier,
+                ':identifier_username' => $identifier,
+                ':priority_email'      => $identifier,
+            ]);
             $user = $stmt->fetch();
 
             if (!$user || !password_verify($password, $user['password_hash'])) {
