@@ -1,8 +1,24 @@
 #!/bin/sh
 # Wait for the nginx access log to appear, then generate a report every 30 s.
 
-LOG=/var/log/nginx/access.log
+LOG=/var/log/nginx/access-local.log
 OUT=/var/www/html/report.html
+
+if [ ! -f "$OUT" ]; then
+    cat >"$OUT" <<'EOF'
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>GoAccess report pending</title>
+</head>
+<body>
+    <h1>GoAccess report is starting</h1>
+    <p>Reload this page after a few requests reach nginx.</p>
+</body>
+</html>
+EOF
+fi
 
 echo "Waiting for nginx access log..."
 while [ ! -f "$LOG" ]; do
