@@ -22,7 +22,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                ORDER BY CASE WHEN email = :priority_email THEN 0 ELSE 1 END
                   LIMIT 1'
             );
-            $stmt->execute([':v' => $identifier]);
             $stmt->execute([
                 ':identifier_email'    => $identifier,
                 ':identifier_username' => $identifier,
