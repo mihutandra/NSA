@@ -137,6 +137,12 @@ celerybeat.pid
 # Environments
 .env
 .envrc
+
+# Generated SSL certificates (created at runtime by the nginx container)
+nginx/ssl/
+
+# GoAccess HTML report (generated at runtime)
+goaccess/report.html
 .venv
 env/
 venv/
