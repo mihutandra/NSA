@@ -83,13 +83,16 @@ the PHP and nginx containers.
 | URL | Service | Access |
 |-----|---------|--------|
 | <https://nsa.local:8443/> | Web application | public (auth required) |
-| <https://nsa.local:8443/phpmyadmin/> | phpMyAdmin | private networks only |
+| <https://nsa.local:8443/phpmyadmin/> | phpMyAdmin | private networks only (auto-login as `root`) |
 | <https://nsa.local:8443/mail/> | MailHog web UI | private networks only |
 | <https://nsa.local:8443/logs/> | GoAccess log report | private networks only |
 | <http://nsa.local:8080/> | HTTP – redirects to HTTPS | — |
 
 > **Browser TLS warning**: The certificate is self-signed. Accept the warning in
 > your browser to proceed.
+
+> **phpMyAdmin login note**: phpMyAdmin authenticates against **MySQL users** (for example `root` or `webapp` from `.env`), not web-app accounts created via `/register.php`.
+
 
 ---
 

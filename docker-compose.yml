@@ -155,12 +155,15 @@ services:
       PMA_HOSTS: db-master,db-slave
       PMA_PORT: 3306
       PMA_ABSOLUTE_URI: ${APP_URL}/phpmyadmin/
+      PMA_USER: root
+      PMA_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     depends_on:
       - db-master
     networks:
       - backend
     restart: unless-stopped
+
 
   # ── Redis (session store) ─────────────────────────────────────────────
   redis:
