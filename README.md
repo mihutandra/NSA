@@ -7,19 +7,19 @@ A fully containerised web stack satisfying all project requirements.
 ## Architecture
 
 ```
-                     ┌─────────────────────────────────────┐
-Internet / Browser   │  Host machine (Linux VM / bare metal)│
-                     │                                      │
-  :8080 (HTTP)  ───► │  nginx  ─── redirect to HTTPS ──────►│
-  :8443 (HTTPS) ───► │  nginx  ─── load-balance ───────────►│  webapp1 (PHP)
-                     │         ├── /phpmyadmin/ ───────────►│  webapp2 (PHP)
-                     │         ├── /mail/       ───────────►│  phpMyAdmin
-                     │         └── /logs/       (static) ──►│  MailHog
-                     │                                      │  GoAccess (log reporter)
-                     │  db-master (MySQL 8, writes)          │
-                     │  db-slave  (MySQL 8, read-only)       │
+                     ┌───────────────────────────────────────┐
+Internet / Browser   │  Host machine (Linux VM / bare metal) │
+                     │                                       |
+  :8080 (HTTP)  ───► │  nginx  ─── redirect to HTTPS ──────► │
+  :8443 (HTTPS) ───► │  nginx  ─── load-balance ───────────► │  webapp1 (PHP)
+                     │         ├── /phpmyadmin/ ───────────► │  webapp2 (PHP)
+                     │         ├── /mail/       ───────────► │  phpMyAdmin
+                     │         └── /logs/       (static) ──► │  MailHog
+                     │                                       │  GoAccess (log reporter)
+                     │  db-master (MySQL, writes)            │
+                     │  db-slave  (MySQL, read-only)         │
                      │  redis     (shared session store)     │
-                     └─────────────────────────────────────┘
+                     └───────────────────────────────────────┘
 ```
 
 | Service | Purpose | Points |
@@ -93,6 +93,36 @@ the PHP and nginx containers.
 
 > **phpMyAdmin login note**: phpMyAdmin authenticates against **MySQL users** (for example `root` or `webapp` from `.env`), not web-app accounts created via `/register.php`.
 
+### Scripts
+
+<remarks>
+This command creates a fresh project installation and installs all required
+dependencies via Composer. The "--fresh" flag ensures a clean installation by removing
+any existing vendor directory and node_modules, then reinstalling everything from scratch.
+This is useful for ensuring a consistent, dependency-free starting point without any
+stale or cached packages.
+</remarks>
+
+#### `start.sh`
+Starts all containers in detached mode and displays service URLs.
+```bash
+docker compose up -d --build
+echo "Services running at https://nsa.local:8443/"
+```
+
+#### `stop.sh`
+Stops and removes all running containers (preserves volumes and data).
+```bash
+docker compose down
+echo "All services stopped."
+```
+
+Run scripts with:
+```bash
+chmod +x start.sh stop.sh
+./start.sh
+./stop.sh
+```
 
 ---
 
